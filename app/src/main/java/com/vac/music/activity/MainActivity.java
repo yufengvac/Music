@@ -1,33 +1,47 @@
-package com.vac.music;
+package com.vac.music.activity;
 
 import android.content.Context;
-import android.os.Build;
+import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
+import com.vac.music.R;
 import com.vac.music.fragments.BaseSwipeBackFragment;
 import com.vac.music.fragments.home.HomeMainFragment;
+import com.vac.music.myview.MyMenuButton;
+import com.vac.music.myview.MyProgressbar;
+import com.vac.music.myview.MyTriangle;
+import com.vac.music.skin.listener.OnSkinChangeListener;
 import com.vac.music.swipebackfragment.SwipeBackActivity;
-@SuppressWarnings("NewApi")
-public class MainActivity extends SwipeBackActivity implements BaseSwipeBackFragment.OnAddFragmentListener {
+import com.vac.music.utils.ShareUtil;
 
+@SuppressWarnings("NewApi")
+public class MainActivity extends SwipeBackActivity implements BaseSwipeBackFragment.OnAddFragmentListener
+,OnSkinChangeListener{
+
+    private MyTriangle myTriangle;
+    private MyMenuButton myMenuButton;
+    private MyProgressbar mProgressbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
         setStautsColor();
-
+        myTriangle = (MyTriangle) findViewById(R.id.main_play_mytriangle);
+        myMenuButton = (MyMenuButton) findViewById(R.id.main_menu_mymenubtn);
+        mProgressbar = (MyProgressbar) findViewById(R.id.main_progressbar);
+        updateColor();
 
         if (savedInstanceState == null) {
             HomeMainFragment firstFragment = HomeMainFragment.newInstance(null);
+            firstFragment.addOnSkinChangeListener(this);
             loadFragment(firstFragment);
         }
     }
@@ -130,5 +144,22 @@ public class MainActivity extends SwipeBackActivity implements BaseSwipeBackFrag
             result = context.getResources().getDimensionPixelSize(resourceId);
         }
         return result;
+    }
+
+    @Override
+    public void onSkinChange(int alpha, int red, int green, int blue) {
+        int color = Color.argb(alpha,red,green,blue);
+        myTriangle.setColor(color);
+        myMenuButton.setColor(color);
+        mProgressbar.setProgressColor(color);
+    }
+    private void updateColor(){
+        int alpha = ShareUtil.getBaseColor_A(this);
+        int red = ShareUtil.getBaseColor_R(this);
+        int green = ShareUtil.getBaseColor_G(this);
+        int blue = ShareUtil.getBaseColor_B(this);
+        if (alpha!=0&&red!=0&&green!=0&&blue!=0){
+            onSkinChange(alpha,red,green,blue);
+        }
     }
 }

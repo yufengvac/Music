@@ -23,6 +23,7 @@
                 android:layout_height="match_parent"
                 android:contentDescription="@string/app_name"
                 android:scaleType="centerCrop"
+                android:clickable="true"
                 android:src="@drawable/default_my_music_bg" />
             <ImageView
                 android:id="@+id/local_music_bg1"
@@ -235,7 +236,7 @@
                 android:background="@null"
                 android:layout_marginTop="10dp">
                 <LinearLayout
-                    android:id="@+id/my_music_fra_module_favor"
+                    android:id="@+id/local_music_fra_module_favor"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:background="@color/default_color"

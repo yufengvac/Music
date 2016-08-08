@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import com.vac.music.R;
 import com.vac.music.fragments.BaseSwipeBackFragment;
+import com.vac.music.skin.listener.OnSkinChangeListener;
+import com.vac.music.utils.ShareUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,8 @@ import java.util.List;
  * Created by vac on 16/8/5.
  *
  */
-public class HomeMainFragment extends BaseSwipeBackFragment implements LocalMusicFragment.onFragmentScrollViewListener {
+public class HomeMainFragment extends BaseSwipeBackFragment implements LocalMusicFragment.onFragmentScrollViewListener
+,OnSkinChangeListener{
 
     private static final String TAG = HomeMainFragment.class.getSimpleName();
     private ViewPager viewPager;
@@ -34,6 +37,12 @@ public class HomeMainFragment extends BaseSwipeBackFragment implements LocalMusi
     private View indicatorView;
     private List<Fragment> fragmentList = new ArrayList<>();
     private RelativeLayout topLaout;
+    private int currentAlpha= 0x30, currentRed,currentGreen,currentBlue;
+    private int alpha,red,green,blue;
+
+    private int color= Color.argb(0x90, 0xff, 0x00, 0x00);
+    private float scale;
+    private OnSkinChangeListener mainSkinChangeListener;
     public static HomeMainFragment newInstance(Bundle bundle){
         HomeMainFragment homeMainFragment = new HomeMainFragment();
         if (bundle!=null){
@@ -53,6 +62,7 @@ public class HomeMainFragment extends BaseSwipeBackFragment implements LocalMusi
 
         LocalMusicFragment localMusicFragment = LocalMusicFragment.newInstance(null);
         localMusicFragment.setOnScrollListener(this);
+        localMusicFragment.addOnSkinChangeListener(mainSkinChangeListener,this);
         fragmentList.add(localMusicFragment);
         fragmentList.add(NetMusicFragment.newInstance(null));
         fragmentPagerAdapter = new FragmentPagerAdapter(getFragmentManager()) {
@@ -68,8 +78,7 @@ public class HomeMainFragment extends BaseSwipeBackFragment implements LocalMusi
         };
         viewPager.setAdapter(fragmentPagerAdapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            ColorDrawable colorDrawable= (ColorDrawable) topLaout.getBackground();//获取背景颜色
-            int currentColor = colorDrawable.getColor();
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 LinearLayout.LayoutParams params = (android.widget.LinearLayout.LayoutParams) indicatorView
@@ -78,19 +87,16 @@ public class HomeMainFragment extends BaseSwipeBackFragment implements LocalMusi
                         (int) (optionView1.getWidth() * (positionOffset + position)), 0,
                         0, 0);
                 indicatorView.setLayoutParams(params);
+                if (positionOffset > 0) {
 
-                if (positionOffsetPixels>0){
-
-                    int red = (currentColor & 0xff0000) >> 16;
-                    int green = (currentColor & 0x00ff00) >> 8;
-                    int blue = (currentColor & 0x0000ff);
-                    Log.i(TAG,"red="+red+",green="+green+",blue="+blue);
-
-                    int a = 0x30+(int)((0xff-0x30)*positionOffset);
-                    int r = (int)((0xbb)*positionOffset);
-                    int g = (int)((0x55)*positionOffset);
-                    int b = 0x0;
-                    color = Color.argb(a,r,g,b);
+                    int a = (int) (currentAlpha + (0xff - currentAlpha) * positionOffset);
+                    int r = (int) (currentRed +(Math.abs(red - 0x10 )-currentRed) * positionOffset);
+                    int g = (int) (currentGreen+(Math.abs(green - 0x10)-currentGreen )* positionOffset);
+                    int b =  (int) (currentBlue +(Math.abs(blue - 0x10) - currentBlue) * positionOffset);
+                    color = Color.argb(a, r, g, b);
+                    topLaout.setBackgroundColor(color);
+                }else if(positionOffset==0&&position==0){
+                    color = Color.argb(currentAlpha, currentRed, currentGreen, currentBlue);
                     topLaout.setBackgroundColor(color);
                 }
 
@@ -107,27 +113,61 @@ public class HomeMainFragment extends BaseSwipeBackFragment implements LocalMusi
             }
         });
 
+        updateColor();
 
         return attachToSwipeBack(view);
     }
 
-    int color= Color.argb(0x90, 0xff, 0x00, 0x00);
-    int baseColor = 240;
-    int baseHeight = 250;
+
+    int baseHeight = 300;
     @Override
     public void onScroll(int scrollY) {
         if (scrollY<=baseHeight&&scrollY>0){
-            float scale = scrollY*1f/baseHeight;
-            int a = 0x30+(int)((0xff-0x30)*scale);
-            int r = (int)((0xbb)*scale);
-            int g = (int)((0x55)*scale);
-            int b = 0x0;
-            color = Color.argb(a,r,g,b);
+            scale = scrollY*1f/baseHeight;
+            currentAlpha = 0x30+(int)((0xff-0x30)*scale);
+            currentRed = (int)(Math.abs(red-0x10)*scale);
+            currentGreen = (int)(Math.abs(green-0x10)*scale);
+            currentBlue = (int)(Math.abs(blue-0x10)*scale);
         }else if (scrollY>baseHeight){
-            color= Color.argb(0xff,0xbb,0x55,0x00);
+            scale = 1;
+            currentAlpha = 0xff;
+            currentRed = Math.abs(red-0x10);
+            currentGreen = Math.abs(green-0x10);
+            currentBlue = Math.abs(blue-0x10);
         }else if (scrollY==0){
-            color = Color.argb(0x30,0,0,0);
+            scale = 0;
+            currentAlpha = 0x30;
+            currentRed = currentGreen= currentRed = 0x0;
         }
+        color = Color.argb(currentAlpha,currentRed,currentGreen,currentBlue);
+        topLaout.setBackgroundColor(color);
+    }
+
+    @Override
+    public void onSkinChange(int a, int r, int g, int b) {
+        alpha = a;
+        red = r;
+        green = g;
+        blue = b;
+
+        currentAlpha = 0x30+(int)((a-0x30)*scale);
+        currentRed = (int)(Math.abs(r-0x10)*scale);
+        currentGreen = (int)(Math.abs(g-0x10)*scale);
+        currentBlue = (int)(Math.abs(b-0x10)*scale);
+        color = Color.argb(currentAlpha,currentRed,currentGreen,currentBlue);
+        topLaout.setBackgroundColor(color);
+    }
+
+    public void addOnSkinChangeListener(OnSkinChangeListener listener){
+        this.mainSkinChangeListener = listener;
+    }
+
+    private void updateColor(){
+        alpha = ShareUtil.getBaseColor_A(this.getActivity());
+        red = ShareUtil.getBaseColor_R(this.getActivity());
+        green = ShareUtil.getBaseColor_G(this.getActivity());
+        blue = ShareUtil.getBaseColor_B(this.getActivity());
+        color = Color.argb(0x30,0x00,0x00,0x00);
         topLaout.setBackgroundColor(color);
     }
 }
