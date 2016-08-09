@@ -40,6 +40,8 @@ public class SwipeBackLayout extends FrameLayout {
      */
     public static final int EDGE_RIGHT = ViewDragHelper.EDGE_RIGHT;
 
+    public static final int EDGE_BOTTOM = ViewDragHelper.EDGE_BOTTOM;
+
     public static final int EDGE_ALL = EDGE_LEFT | EDGE_RIGHT;
 
 
@@ -109,6 +111,8 @@ public class SwipeBackLayout extends FrameLayout {
         setShadow(R.drawable.shadow_left, EDGE_LEFT);
         setEdgeOrientation(EDGE_LEFT);
     }
+
+
 
     /**
      * Set scroll threshold, we will close the activity, when scrollPercent over
@@ -336,7 +340,7 @@ public class SwipeBackLayout extends FrameLayout {
                                 if (fragment != null && fragment.getView() != null) {
                                     fragment.getView().setVisibility(VISIBLE);
                                     mPreFragment = fragment;
-                                    break;
+//                                    break;
                                 }
                             }
                         }

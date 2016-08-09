@@ -5,5 +5,5 @@ package com.vac.music.skin.listener;
  * 壁纸更换
  */
 public interface OnSkinChangeListener {
-    void onSkinChange(int alpha,int red,int green,int blue);
+    void onSkinChange(int alpha,int red,int green,int blue,String url);
 }

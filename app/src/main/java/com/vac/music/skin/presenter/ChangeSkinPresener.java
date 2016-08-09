@@ -22,11 +22,9 @@ import java.util.List;
  */
 public class ChangeSkinPresener {
     private static final String TAG = ChangeSkinPresener.class.getSimpleName();
-    private Context mContext;
     private IChangeSkinView mListener;
     private IChangeSkin iChangeSkinListener;
     public ChangeSkinPresener(Activity activity){
-        this.mContext = activity;
         iChangeSkinListener = new IChangeSkinImpl();
         if (activity instanceof IChangeSkinView){
             this.mListener = (IChangeSkinView)activity;

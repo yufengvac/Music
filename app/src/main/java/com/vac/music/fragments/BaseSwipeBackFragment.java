@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.vac.music.R;
 import com.vac.music.swipebackfragment.SwipeBackFragment;
+import com.vac.music.swipebackfragment.SwipeBackLayout;
 
 
 /**

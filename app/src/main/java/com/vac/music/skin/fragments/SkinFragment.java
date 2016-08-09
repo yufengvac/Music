@@ -27,6 +27,7 @@ public class SkinFragment  extends Fragment implements View.OnClickListener {
     private ArrayList<BaseColor> baseColorArrayList;
     private List<OnSkinChangeListener> skinChangeListenerList = new ArrayList<>();
     private int index;
+    private ArrayList<String> urlList;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class SkinFragment  extends Fragment implements View.OnClickListener {
 
         Bundle bundle = getArguments();
         if (bundle!=null){
-            ArrayList<String> urlList = bundle.getStringArrayList("urlList");
+            urlList = bundle.getStringArrayList("urlList");
             index = bundle.getInt("index");
             imageLoader.displayImage(urlList!=null?urlList.get(index*3):"",imageView1);
             imageLoader.displayImage(urlList!=null?urlList.get(1+index*3):"",imageView2);
@@ -60,19 +61,26 @@ public class SkinFragment  extends Fragment implements View.OnClickListener {
         }
         int id = view.getId();
         BaseColor baseColor=null;
+        String picUrl = null;
         if (id==R.id.skin_imageview_1){
             baseColor = baseColorArrayList.get(index*3);
+            picUrl = urlList.get(index*3);
         }else if (id == R.id.skin_imageview_2){
             baseColor = baseColorArrayList.get(1+index*3);
+            picUrl = urlList.get(1+index*3);
         }else if (id == R.id.skin_imageview_3){
             baseColor = baseColorArrayList.get(2+index*3);
+            picUrl = urlList.get(2+index*3);
         }
-        if (baseColor==null){
+        if (baseColor==null||picUrl==null){
             return;
         }
+
+        ShareUtil.saveMainPicture(getActivity(),picUrl);
         ShareUtil.saveBaseColor(getActivity(),baseColor.getAlpha(),baseColor.getRed(),baseColor.getGreen(),baseColor.getBlue());
         for (int i=0;i<skinChangeListenerList.size();i++){
-            skinChangeListenerList.get(i).onSkinChange(baseColor.getAlpha(),baseColor.getRed(),baseColor.getGreen(),baseColor.getBlue());
+            skinChangeListenerList.get(i).onSkinChange(baseColor.getAlpha(),baseColor.getRed()
+                    ,baseColor.getGreen(),baseColor.getBlue(),picUrl);
         }
     }
 
@@ -80,6 +88,14 @@ public class SkinFragment  extends Fragment implements View.OnClickListener {
         if (skinChangeListeners!=null){
             skinChangeListenerList.clear();
             skinChangeListenerList.addAll(skinChangeListeners);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (skinChangeListenerList!=null){
+            skinChangeListenerList.clear();
         }
     }
 }

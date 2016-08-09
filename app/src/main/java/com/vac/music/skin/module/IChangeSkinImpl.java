@@ -38,8 +38,8 @@ public class IChangeSkinImpl implements IChangeSkin{
         BaseColor baseColor4 = new BaseColor(0xff,0x78,0xb2,0xbe);
         BaseColor baseColor5 = new BaseColor(0xff,0x00,0x97,0x67);
         BaseColor baseColor6 = new BaseColor(0xff,0xff,0xc9,0x78);
-        BaseColor baseColor7 = new BaseColor(0xff,0x82,0x92,0x24);
-        BaseColor baseColor8 = new BaseColor(0xff,0x55,0x86,0x51);
+        BaseColor baseColor7 = new BaseColor(0xff,0x66,0x91,0xdf);
+        BaseColor baseColor8 = new BaseColor(0xff,0xc0,0x87,0x68);
 
         baseColorList.add(baseColor0);baseColorList.add(baseColor1);
         baseColorList.add(baseColor2);baseColorList.add(baseColor3);

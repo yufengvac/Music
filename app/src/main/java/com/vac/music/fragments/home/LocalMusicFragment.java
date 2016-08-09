@@ -12,7 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vac.music.R;
+import com.vac.music.activity.MusicPlayActivity;
 import com.vac.music.fragments.BaseSwipeBackFragment;
 import com.vac.music.fragments.test.TestFragment;
 import com.vac.music.myview.MyScrollView;
@@ -36,6 +38,7 @@ public class LocalMusicFragment extends BaseSwipeBackFragment implements OnSkinC
     private OnSkinChangeListener skinChangeListener1,skinChangeListener2;
 
     private ImageView bgImageView;
+    private ImageLoader imageLoader = ImageLoader.getInstance();
     public static LocalMusicFragment newInstance(Bundle bundle){
         LocalMusicFragment localMusicFragment = new LocalMusicFragment();
         if (bundle!=null){
@@ -75,10 +78,11 @@ public class LocalMusicFragment extends BaseSwipeBackFragment implements OnSkinC
         module_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mAddFragmentListener!=null){
-                    TestFragment testFragment = TestFragment.newInstance(null);
-                    mAddFragmentListener.onAddFragment(LocalMusicFragment.this,testFragment);
-                }
+//                if (mAddFragmentListener!=null){
+//                    TestFragment testFragment = TestFragment.newInstance(null);
+//                    mAddFragmentListener.onAddFragment(LocalMusicFragment.this,testFragment);
+//                }
+                startActivity(new Intent(getActivity(),MusicPlayActivity.class));
             }
         });
 
@@ -105,8 +109,9 @@ public class LocalMusicFragment extends BaseSwipeBackFragment implements OnSkinC
     }
 
     @Override
-    public void onSkinChange(int alpha, int red, int green, int blue) {
+    public void onSkinChange(int alpha, int red, int green, int blue,String url) {
         changeColor(alpha,red,green,blue);
+        imageLoader.displayImage(url,bgImageView);
     }
 
     public interface onFragmentScrollViewListener{
@@ -119,6 +124,8 @@ public class LocalMusicFragment extends BaseSwipeBackFragment implements OnSkinC
         int green = ShareUtil.getBaseColor_G(getActivity());
         int blue = ShareUtil.getBaseColor_B(getActivity());
         changeColor(alpha,red,green,blue);
+        String picUrl = ShareUtil.getMainPicture(getActivity());
+        imageLoader.displayImage(picUrl,bgImageView);
     }
     private void changeColor(int alpha,int red,int green,int blue){
         int color = Color.argb(alpha,red,green,blue);

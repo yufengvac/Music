@@ -11,12 +11,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.vac.music.R;
 import com.vac.music.fragments.BaseSwipeBackFragment;
+import com.vac.music.search.homemain.HomeSearchFragment;
 import com.vac.music.skin.listener.OnSkinChangeListener;
 import com.vac.music.utils.ShareUtil;
 
@@ -43,6 +45,7 @@ public class HomeMainFragment extends BaseSwipeBackFragment implements LocalMusi
     private int color= Color.argb(0x90, 0xff, 0x00, 0x00);
     private float scale;
     private OnSkinChangeListener mainSkinChangeListener;
+    private ImageView searchImageView;
     public static HomeMainFragment newInstance(Bundle bundle){
         HomeMainFragment homeMainFragment = new HomeMainFragment();
         if (bundle!=null){
@@ -59,6 +62,7 @@ public class HomeMainFragment extends BaseSwipeBackFragment implements LocalMusi
         optionView2 = (TextView)view.findViewById(R.id.home_main_fragment_option2);
         topLaout = (RelativeLayout)view.findViewById(R.id.home_main_top_layout);
         indicatorView = view.findViewById(R.id.home_main_indicator_view);
+        searchImageView = (ImageView) view.findViewById(R.id.home_main_fragment_search);
 
         LocalMusicFragment localMusicFragment = LocalMusicFragment.newInstance(null);
         localMusicFragment.setOnScrollListener(this);
@@ -113,6 +117,16 @@ public class HomeMainFragment extends BaseSwipeBackFragment implements LocalMusi
             }
         });
 
+        searchImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mAddFragmentListener!=null){
+                    HomeSearchFragment homeSearchFragment = new HomeSearchFragment();
+                    mAddFragmentListener.onAddFragment(HomeMainFragment.this,homeSearchFragment);
+                }
+            }
+        });
+
         updateColor();
 
         return attachToSwipeBack(view);
@@ -144,7 +158,7 @@ public class HomeMainFragment extends BaseSwipeBackFragment implements LocalMusi
     }
 
     @Override
-    public void onSkinChange(int a, int r, int g, int b) {
+    public void onSkinChange(int a, int r, int g, int b,String url) {
         alpha = a;
         red = r;
         green = g;
