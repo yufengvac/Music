@@ -21,7 +21,8 @@
         <activity
             android:name=".skin.activity.ChangeSkinViewActivity"
             android:theme="@style/MyDialogStyleBottom" />
-        <activity android:name=".activity.MusicPlayActivity"/>
+        <activity android:name=".activity.MusicPlayActivity"
+            android:theme="@style/swipeBack"/>
 
     </application>
 

@@ -40,7 +40,7 @@ public class MainActivity extends SwipeBackActivity implements BaseSwipeBackFrag
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        setStautsColor();
+//        setStautsColor();
         myTriangle = (MyTriangle) findViewById(R.id.main_play_mytriangle);
         myMenuButton = (MyMenuButton) findViewById(R.id.main_menu_mymenubtn);
         mProgressbar = (MyProgressbar) findViewById(R.id.main_progressbar);
@@ -203,5 +203,6 @@ public class MainActivity extends SwipeBackActivity implements BaseSwipeBackFrag
 //                .commit();
 
         startActivity(new Intent(this,MusicPlayActivity.class));
+        overridePendingTransition(R.anim.push_bottom_in,R.anim.push_bottom_out);
     }
 }

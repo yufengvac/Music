@@ -34,7 +34,7 @@
     </declare-styleable>
 
 
-    <style name="swipeBack">
+    <style name="swipeBack" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@android:color/darker_gray</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>

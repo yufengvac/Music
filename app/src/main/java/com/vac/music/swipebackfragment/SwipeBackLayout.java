@@ -40,6 +40,8 @@ public class SwipeBackLayout extends FrameLayout {
      */
     public static final int EDGE_RIGHT = ViewDragHelper.EDGE_RIGHT;
 
+    public static final int EDGE_TOP = ViewDragHelper.EDGE_TOP;
+
     public static final int EDGE_BOTTOM = ViewDragHelper.EDGE_BOTTOM;
 
     public static final int EDGE_ALL = EDGE_LEFT | EDGE_RIGHT;
@@ -322,6 +324,10 @@ public class SwipeBackLayout extends FrameLayout {
                     mCurrentSwipeOrientation = EDGE_LEFT;
                 } else if (mHelper.isEdgeTouched(EDGE_RIGHT, pointerId)) {
                     mCurrentSwipeOrientation = EDGE_RIGHT;
+                }else if (mHelper.isEdgeTouched(EDGE_TOP,pointerId)){
+                    mCurrentSwipeOrientation = EDGE_TOP;
+                }else if (mHelper.isEdgeTouched(EDGE_BOTTOM,pointerId)){
+                    mCurrentSwipeOrientation = EDGE_BOTTOM;
                 }
 
                 if (mListeners != null && !mListeners.isEmpty()) {
@@ -367,12 +373,23 @@ public class SwipeBackLayout extends FrameLayout {
         }
 
         @Override
+        public int clampViewPositionVertical(View child, int top, int dy) {
+            int ret = 0;
+            if ((mCurrentSwipeOrientation&EDGE_TOP)!=0){
+                ret = Math.min(child.getHeight(),Math.max(top,0));
+            }
+            return ret;
+        }
+
+        @Override
         public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
             super.onViewPositionChanged(changedView, left, top, dx, dy);
             if ((mCurrentSwipeOrientation & EDGE_LEFT) != 0) {
                 mScrollPercent = Math.abs((float) left / (getWidth() + mShadowLeft.getIntrinsicWidth()));
             } else if ((mCurrentSwipeOrientation & EDGE_RIGHT) != 0) {
                 mScrollPercent = Math.abs((float) left / (mContentView.getWidth() + mShadowRight.getIntrinsicWidth()));
+            }else  if ((mCurrentSwipeOrientation & EDGE_TOP) != 0){
+                mScrollPercent = Math.abs((float)top/mContentView.getHeight());
             }
             invalidate();
 

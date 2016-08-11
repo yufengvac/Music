@@ -90,7 +90,9 @@ public class LocalMusicFragment extends BaseSwipeBackFragment implements OnSkinC
         scrollView.setOnScrollListener(new MyScrollView.OnScrollListener() {
             @Override
             public void onScroll(int scrollY) {
-               onFragmentScrollViewListener.onScroll(scrollY);
+                if (onFragmentScrollViewListener!=null){
+                    onFragmentScrollViewListener.onScroll(scrollY);
+                }
             }
         });
 
