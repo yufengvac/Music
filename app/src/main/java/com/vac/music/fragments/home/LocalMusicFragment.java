@@ -1,9 +1,12 @@
 package com.vac.music.fragments.home;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vac.music.R;
 import com.vac.music.activity.MusicPlayActivity;
 import com.vac.music.fragments.BaseSwipeBackFragment;
@@ -20,12 +25,15 @@ import com.vac.music.fragments.test.TestFragment;
 import com.vac.music.myview.MyScrollView;
 import com.vac.music.skin.activity.ChangeSkinViewActivity;
 import com.vac.music.skin.listener.OnSkinChangeListener;
+import com.vac.music.utils.AlpahUtil;
+import com.vac.music.utils.BgUtil;
 import com.vac.music.utils.ShareUtil;
 
 /**
  * Created by vac on 16/8/5.
  *
  */
+@SuppressWarnings("NewApi")
 public class LocalMusicFragment extends BaseSwipeBackFragment implements OnSkinChangeListener{
     private static final String TAG = LocalMusicFragment.class.getSimpleName();
     private TextView textView;
@@ -37,8 +45,10 @@ public class LocalMusicFragment extends BaseSwipeBackFragment implements OnSkinC
 
     private OnSkinChangeListener skinChangeListener1,skinChangeListener2;
 
-    private ImageView bgImageView;
+    private ImageView bgImageView,bgImageView1;
     private ImageLoader imageLoader = ImageLoader.getInstance();
+
+    private Drawable drawable,drawable1;
     public static LocalMusicFragment newInstance(Bundle bundle){
         LocalMusicFragment localMusicFragment = new LocalMusicFragment();
         if (bundle!=null){
@@ -97,6 +107,7 @@ public class LocalMusicFragment extends BaseSwipeBackFragment implements OnSkinC
         });
 
         bgImageView = (ImageView) view.findViewById(R.id.local_music_bg);
+        bgImageView1 = (ImageView) view.findViewById(R.id.local_music_bg1);
         bgImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,6 +117,17 @@ public class LocalMusicFragment extends BaseSwipeBackFragment implements OnSkinC
                 startActivity(new Intent(getActivity(), ChangeSkinViewActivity.class));
             }
         });
+        bgImageView1.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                ChangeSkinViewActivity.addOnSkinChangeListener(skinChangeListener1);
+                ChangeSkinViewActivity.addOnSkinChangeListener(skinChangeListener2);
+                ChangeSkinViewActivity.addOnSkinChangeListener(LocalMusicFragment.this);
+                startActivity(new Intent(getActivity(), ChangeSkinViewActivity.class));
+            }
+        });
+        drawable = bgImageView.getBackground();
+        drawable1 = bgImageView1.getBackground();
         updateUIColor();
         return attachToSwipeBack(view);
     }
@@ -113,7 +135,30 @@ public class LocalMusicFragment extends BaseSwipeBackFragment implements OnSkinC
     @Override
     public void onSkinChange(int alpha, int red, int green, int blue,String url) {
         changeColor(alpha,red,green,blue);
-        imageLoader.displayImage(url,bgImageView);
+        if (drawable.getAlpha()<=20){
+           drawable = BgUtil.setHomeBackground(getActivity(),bgImageView,url);
+//            bgImageView1.getBackground().setAlpha(255);
+//            bgImageView.getBackground().setAlpha(0);
+
+            AlpahUtil alpahUtil = new AlpahUtil(drawable1, drawable);
+            alpahUtil.toExecute();
+
+
+        }else {
+
+            drawable1 = BgUtil.setHomeBackground(getActivity(),bgImageView1,url);
+//            bgImageView1.getBackground().setAlpha(0);
+//            bgImageView.getBackground().setAlpha(255);
+
+            AlpahUtil alpahUtil = new AlpahUtil(drawable, drawable1);
+            alpahUtil.toExecute();
+
+
+        }
+
+        Log.i(TAG,"bg="+bgImageView.getBackground().getAlpha()+",bg1="
+        +bgImageView1.getBackground().getAlpha());
+
     }
 
     public interface onFragmentScrollViewListener{
@@ -127,7 +172,11 @@ public class LocalMusicFragment extends BaseSwipeBackFragment implements OnSkinC
         int blue = ShareUtil.getBaseColor_B(getActivity());
         changeColor(alpha,red,green,blue);
         String picUrl = ShareUtil.getMainPicture(getActivity());
-        imageLoader.displayImage(picUrl,bgImageView);
+//        drawable.seAlpha(0);
+//        imageLoader.displayImage(picUrl,bgImageView1);
+        drawable1 = BgUtil.setHomeBackground(getActivity(),bgImageView1,picUrl);
+        drawable = BgUtil.setHomeBackground(getActivity(),bgImageView,picUrl);
+
     }
     private void changeColor(int alpha,int red,int green,int blue){
         int color = Color.argb(alpha,red,green,blue);

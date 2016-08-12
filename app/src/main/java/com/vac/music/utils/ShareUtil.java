@@ -54,4 +54,5 @@ public class ShareUtil {
         int[] color = new int[]{a,r,g,b};
         return color;
     }
+
 }

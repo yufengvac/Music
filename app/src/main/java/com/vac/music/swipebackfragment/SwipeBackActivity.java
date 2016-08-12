@@ -3,6 +3,7 @@ package com.vac.music.swipebackfragment;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.v4.view.ViewCompat;
@@ -55,6 +56,9 @@ public class SwipeBackActivity extends AppCompatActivity {
     }
 
     private void setStautsColor() {
+        if (Build.VERSION.SDK_INT<20){
+            return;
+        }
         Window window = getWindow();
         //设置透明状态栏,这样才能让 ContentView 向上
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
