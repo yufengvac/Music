@@ -176,8 +176,8 @@ public class MainActivity extends SwipeBackActivity implements BaseSwipeBackFrag
      */
     public void toPlayActivity(View view){
 //        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
-        int count = getSupportFragmentManager().getBackStackEntryCount();
-        FragmentManager.BackStackEntry backStackEntry = getSupportFragmentManager().getBackStackEntryAt(count-1);
+//        int count = getSupportFragmentManager().getBackStackEntryCount();
+//        FragmentManager.BackStackEntry backStackEntry = getSupportFragmentManager().getBackStackEntryAt(count-1);
 
 //        Log.e("MainActivity","count个数="+count);
 //        if (fragmentList==null){
