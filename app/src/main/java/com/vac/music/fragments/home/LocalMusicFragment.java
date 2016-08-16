@@ -49,6 +49,7 @@ public class LocalMusicFragment extends BaseSwipeBackFragment implements OnSkinC
     private ImageLoader imageLoader = ImageLoader.getInstance();
 
     private Drawable drawable,drawable1;
+    private String lastUrl;
     public static LocalMusicFragment newInstance(Bundle bundle){
         LocalMusicFragment localMusicFragment = new LocalMusicFragment();
         if (bundle!=null){
@@ -135,27 +136,27 @@ public class LocalMusicFragment extends BaseSwipeBackFragment implements OnSkinC
     @Override
     public void onSkinChange(int alpha, int red, int green, int blue,String url) {
         changeColor(alpha,red,green,blue);
+        if (url.equals(lastUrl)){
+            return;
+        }
         if (drawable.getAlpha()<=20){
-           drawable = BgUtil.setHomeBackground(getActivity(),bgImageView,url);
-//            bgImageView1.getBackground().setAlpha(255);
-//            bgImageView.getBackground().setAlpha(0);
+            drawable = BgUtil.setHomeBackground(getActivity(),bgImageView,url);
+            drawable1.setAlpha(255);
+            drawable.setAlpha(0);
 
             AlpahUtil alpahUtil = new AlpahUtil(drawable1, drawable);
             alpahUtil.toExecute();
 
-
         }else {
-
             drawable1 = BgUtil.setHomeBackground(getActivity(),bgImageView1,url);
-//            bgImageView1.getBackground().setAlpha(0);
-//            bgImageView.getBackground().setAlpha(255);
+            drawable1.setAlpha(0);
+            drawable.setAlpha(255);
 
             AlpahUtil alpahUtil = new AlpahUtil(drawable, drawable1);
             alpahUtil.toExecute();
 
-
         }
-
+        lastUrl = url;
         Log.i(TAG,"bg="+bgImageView.getBackground().getAlpha()+",bg1="
         +bgImageView1.getBackground().getAlpha());
 
@@ -172,11 +173,11 @@ public class LocalMusicFragment extends BaseSwipeBackFragment implements OnSkinC
         int blue = ShareUtil.getBaseColor_B(getActivity());
         changeColor(alpha,red,green,blue);
         String picUrl = ShareUtil.getMainPicture(getActivity());
-//        drawable.seAlpha(0);
-//        imageLoader.displayImage(picUrl,bgImageView1);
+        lastUrl = picUrl;
         drawable1 = BgUtil.setHomeBackground(getActivity(),bgImageView1,picUrl);
-        drawable = BgUtil.setHomeBackground(getActivity(),bgImageView,picUrl);
-
+        drawable = BgUtil.setHomeBackground(getActivity(),bgImageView,"drawable://"+R.drawable.default_my_music_bg);
+        drawable1.setAlpha(255);
+        drawable.setAlpha(0);
     }
     private void changeColor(int alpha,int red,int green,int blue){
         int color = Color.argb(alpha,red,green,blue);

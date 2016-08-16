@@ -12,7 +12,7 @@ import android.widget.ImageView;
  */
 @SuppressWarnings("NewApi")
 public class AlpahUtil {
-    private Drawable hideImageView,showImageView;
+    private Drawable hideDrawable,showDrawable;
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -22,18 +22,18 @@ public class AlpahUtil {
                 if (scale<0||scale>1){
                     return;
                 }
-                showImageView.setAlpha((int) (255 * scale));
-                hideImageView.setAlpha((int) (255 * (1 - scale)));
+                showDrawable.setAlpha((int) (255 * scale));
+                hideDrawable.setAlpha((int) (255 * (1 - scale)));
 //                if (scale>=0.97){
                 Log.e("TAG","1="+(int) (255 * scale)+",2="+(int) (255 * (1 - scale)));
-                    Log.e("TAG","showImageView="+showImageView.getAlpha()+",hideImageView="+hideImageView.getAlpha());
+                    Log.e("TAG","showImageView="+showDrawable.getAlpha()+",hideImageView="+hideDrawable.getAlpha());
 //                }
             }
         }
     };
     public AlpahUtil(Drawable drawable, Drawable drawable1){
-        this.hideImageView = drawable;
-        this.showImageView = drawable1;
+        this.hideDrawable = drawable;
+        this.showDrawable = drawable1;
     }
 
     public void toExecute(){

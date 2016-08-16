@@ -15,15 +15,15 @@ public class IChangeSkinImpl implements IChangeSkin{
     @Override
     public ArrayList<String> getUrlList() {
         urlList.clear();
-        urlList.add("drawable://"+ R.drawable.default_1);
-        urlList.add("drawable://"+ R.drawable.default_2);
-        urlList.add("drawable://"+ R.drawable.default_3);
-        urlList.add("drawable://"+ R.drawable.default_4);
-        urlList.add("drawable://"+ R.drawable.default_5);
-        urlList.add("drawable://"+ R.drawable.default_6);
-        urlList.add("drawable://"+ R.drawable.default_7);
-        urlList.add("drawable://"+ R.drawable.default_8);
-        urlList.add("drawable://"+ R.drawable.default_9);
+        urlList.add("drawable://"+R.drawable.default_1);
+        urlList.add("drawable://"+R.drawable.default_2);
+        urlList.add("drawable://"+R.drawable.default_3);
+        urlList.add("drawable://"+R.drawable.default_4);
+        urlList.add("drawable://"+R.drawable.default_5);
+        urlList.add("drawable://"+R.drawable.default_6);
+        urlList.add("drawable://"+R.drawable.default_7);
+        urlList.add("drawable://"+R.drawable.default_8);
+        urlList.add("drawable://"+R.drawable.default_9);
         return urlList;
     }
 
